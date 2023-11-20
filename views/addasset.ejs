@@ -1,0 +1,10 @@
+<%- include("partials/header.ejs") %>
+
+<h1>Added to list</h1>
+<p>
+    <% if (locals.addedAssetName && locals.addedAssetDate && locals.addedAssetPos && locals.addedAssetEvent) { %>
+        <%= locals.addedAssetName %> Market <%= locals.addedAssetEvent %>: <br>
+        <%= locals.addedAssetPos %> share at $ 100 filled on <%= locals.addedAssetDate %>
+    <%}%>
+</p>
+<%- include("partials/footer.ejs") %>

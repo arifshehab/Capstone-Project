@@ -1,0 +1,26 @@
+<%- include("partials/header.ejs") %>
+
+<h1>Total Assets</h1>
+<form action="/asset" method="POST">
+    <label for="aType">Asset Type: </label>
+    <input type="button" id="stocks" name="aType" value="Stocks and ETFs">
+    <input type="button" id="crypto" name="aType" value="Crypto">
+    <input type="button" id="bonds" name="aType" value="Bonds">
+    <input type="button" id="options" name="aType" value="Options"> <br>
+
+    <label for="aName">Asset Name: </label>
+    <input type="text" name="aName" placeholder="AAPL"> <br>
+    
+    <label for="aPos">Position: </label>
+    <input type="text" name="aPos" placeholder="1 share"> <br>
+    
+    <label for="aEvent">Event: </label>
+    <input type="text" name="aEvent" placeholder="Buy"> <br>
+    
+    <label for="aDate">When: </label>
+    <input type="datetime-local" name="aDate"> <br>
+    
+    <input type="submit" value="OK">
+</form>
+
+<%- include("partials/footer.ejs") %>
