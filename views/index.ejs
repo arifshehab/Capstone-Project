@@ -11,8 +11,8 @@
     <label for="aName">Asset Name: </label>
     <input type="text" name="aName" placeholder="AAPL"> <br>
     
-    <label for="aPos">Position: </label>
-    <input type="text" name="aPos" placeholder="1 share"> <br>
+    <label for="aQuantity">Quantity: </label>
+    <input type="text" name="aQuantity" placeholder="1 share"> <br>
     
     <label for="aEvent">Event: </label>
     <input type="text" name="aEvent" placeholder="Buy"> <br>
@@ -22,5 +22,8 @@
     
     <input type="submit" value="OK">
 </form>
-
+<% if (locals.data) {%>
+<% for (var i = 0; i < data.length; i++) { %>
+    <p> <%= data[i].name%> Market <%= data[i].event%>: <%= data[i].quantity%> shares at <%= data[i].date%></p>
+<%}}%>
 <%- include("partials/footer.ejs") %>

@@ -2,9 +2,14 @@
 
 <h1>Added to list</h1>
 <p>
-    <% if (locals.addedAssetName && locals.addedAssetDate && locals.addedAssetPos && locals.addedAssetEvent) { %>
+    <% if (locals.addedAssetName && locals.addedAssetDate && locals.addedAssetEvent && locals.addedAssetQuantity) { %>
         <%= locals.addedAssetName %> Market <%= locals.addedAssetEvent %>: <br>
-        <%= locals.addedAssetPos %> share at $ 100 filled on <%= locals.addedAssetDate %>
+        <%= locals.addedAssetQuantity %> share at $ 100 filled on <%= locals.addedAssetDate %>
     <%}%>
 </p>
+
+<form action="/" method="GET">
+    <input type="submit" value="Return">
+</form>
+
 <%- include("partials/footer.ejs") %>
