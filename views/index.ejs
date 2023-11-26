@@ -18,12 +18,15 @@
     <input type="text" name="aEvent" placeholder="Buy"> <br>
     
     <label for="aDate">When: </label>
-    <input type="datetime-local" name="aDate"> <br>
+    <input type="date" name="aDate"> <br>
     
+    <label for="aTime">When: </label>
+    <input type="time" name="aTime" step = "300"> <br>
+
     <input type="submit" value="OK">
 </form>
 <% if (locals.data) {%>
 <% for (var i = 0; i < data.length; i++) { %>
-    <p> <%= data[i].name%> Market <%= data[i].event%>: <%= data[i].quantity%> shares at <%= data[i].date%></p>
+    <p> <%= data[i].name%> Market <%= data[i].event%>: <%= data[i].quantity%> shares at <%= data[i].price%></p>
 <%}}%>
 <%- include("partials/footer.ejs") %>

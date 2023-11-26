@@ -4,7 +4,7 @@
 <p>
     <% if (locals.addedAssetName && locals.addedAssetDate && locals.addedAssetEvent && locals.addedAssetQuantity) { %>
         <%= locals.addedAssetName %> Market <%= locals.addedAssetEvent %>: <br>
-        <%= locals.addedAssetQuantity %> share at $ 100 filled on <%= locals.addedAssetDate %>
+        <%= locals.addedAssetQuantity %> share(s) at $<%= locals.addedAssetPrice %> filled on <%= locals.addedAssetDate %> <%= locals.addedAssetTime %>
     <%}%>
 </p>
 
