@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import makeStruct from 'makestruct';
 import axios from "axios";
 import Chart from 'chart.js/auto';
 import pg from 'pg';
