@@ -6,6 +6,7 @@ import Chart from 'chart.js/auto';
 import pg from 'pg';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -17,7 +18,7 @@ const dbParams = {
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
   ssl: {
-    ca: fs.readFileSync(path.join(new URL(import.meta.url).pathname, process.env.SSL_CERT_PATH)),
+    ca: fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'ap-southeast-1-bundle.pem')),
   },
 };
 
@@ -28,7 +29,7 @@ db.connect();
 //Variables
 const app = express();
 const port = 3000;
-const fmpAPIToken = "oYK7bHKQYIdMGpDeGkLgqx3UyCNsKMnq";
+const fmpAPIToken = process.env.FMP_TOKEN;
 
 //Middleware
 app.use(express.static("public"));
