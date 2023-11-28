@@ -1,6 +1,11 @@
 <%- include("partials/header.ejs") %>
-
-<h1>Added to list</h1>
+<%- include("partials/sidebar.ejs") %>
+<div>
+    <h1>
+        <% if (locals.message) {%>
+            <%= locals.message %>
+        <%}%>
+    </h1>
 <p>
     <% if (locals.addedAssetName && locals.addedAssetDate && locals.addedAssetEvent && locals.addedAssetQuantity) { %>
         <%= locals.addedAssetName %> Market <%= locals.addedAssetEvent %>: <br>
@@ -11,5 +16,7 @@
 <form action="/" method="GET">
     <input type="submit" value="Return">
 </form>
+</div>
+
 
 <%- include("partials/footer.ejs") %>

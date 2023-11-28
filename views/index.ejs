@@ -1,32 +1,98 @@
 <%- include("partials/header.ejs") %>
 
+<%- include("partials/sidebar.ejs") %>
+<div class = "main">
 <h1>Total Assets</h1>
-<form action="/asset" method="POST">
-    <label for="aType">Asset Type: </label>
-    <input type="button" id="stocks" name="aType" value="Stocks and ETFs">
-    <input type="button" id="crypto" name="aType" value="Crypto">
-    <input type="button" id="bonds" name="aType" value="Bonds">
-    <input type="button" id="options" name="aType" value="Options"> <br>
 
-    <label for="aName">Asset Name: </label>
+<form action="/asset" method="POST" style="text-align: left; margin-left: 15px" >
+    <label for="aCat" style="width: 150px">Asset Cat: </label>
+    <input type="button" class = "catButton" id="stocks" name="aCat" value="Stocks and ETFs" style="width: 150px">
+    <input type="button" class = "catButton" id="bonds" name="aCat" value="Bonds" style="width: 150px">
+    <input type="button" class = "catButton" id="options" name="aCat" value="Derivatives" style="width: 150px">
+    <input type="button" class = "catButton" id="cash" name="aCat" value="Savings" style="width: 150px">
+    <input type="hidden" class = "catButton" id="selectedCat" name="selectedCat" value="" style="width: 150px"> <br />
+
+    <label for="aPlatform" style="width: 150px">Platform: </label>
+    <input type="text" name="aPlatform"> <br />
+
+    <label for="aName" style="width: 150px">Asset Name: </label>
     <input type="text" name="aName" placeholder="AAPL"> <br>
     
-    <label for="aQuantity">Quantity: </label>
+    <label for="aQuantity" style="width: 150px">Quantity: </label>
     <input type="text" name="aQuantity" placeholder="1 share"> <br>
     
-    <label for="aEvent">Event: </label>
-    <input type="text" name="aEvent" placeholder="Buy"> <br>
-    
-    <label for="aDate">When: </label>
+    <label for="aType" style="width: 150px">Event Type: </label>    
+    <input type="button" class="typeButton" id="buy" name="aType" value="Buy" style="width: 150px">
+    <input type="button" class="typeButton" id="sell" name="aType" value="Sell" style="width: 150px">
+    <input type="hidden" id="selectedType" name="selectedType" value=""> <br>
+
+    <label for="aDate" style="width: 150px">When: </label>
     <input type="date" name="aDate"> <br>
     
-    <label for="aTime">When: </label>
-    <input type="time" name="aTime" step = "300"> <br>
+    <label for="aTime" style="width: 150px">When: </label>
+    <input type="time" name="aTime" step = "60"> <br>
 
     <input type="submit" value="OK">
 </form>
-<% if (locals.data) {%>
-<% for (var i = 0; i < data.length; i++) { %>
-    <p> <%= data[i].name%> Market <%= data[i].event%>: <%= data[i].quantity%> shares at <%= data[i].price%></p>
-<%}}%>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get all elements with class 'eventButton'
+      const catButtons = document.querySelectorAll('.catButton');
+      const typeButtons = document.querySelectorAll('.typeButton');
+  
+      // Attach a click event listener to each button
+      catButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            catButtons.forEach(function (btn) {
+                btn.classList.remove('selected');
+            });
+
+            button.classList.add('selected');  
+            
+            const selectedCat = button.value;
+            console.log(selectedCat);
+
+            switch (selectedCat) {
+                case "Stocks and ETFs": 
+                    document.getElementById('buy').value = "Buy";
+                    document.getElementById('sell').value = "Sell";
+                    break;
+                case "Bonds":
+                    document.getElementById('buy').value = "Buy";
+                    document.getElementById('sell').value = "Sell";
+                    break;
+                case "Derivatives":
+                    document.getElementById('buy').value = "Call";
+                    document.getElementById('sell').value = "Put";
+                    break;
+                case "Savings":
+                    document.getElementById('buy').value = "Deposit";
+                    document.getElementById('sell').value = "Withdraw";
+                    break;
+            }
+            
+            document.getElementById('selectedCat').value = selectedCat;
+            //document.getElementById('assetForm').submit();
+        });
+      });
+      typeButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            typeButtons.forEach(function (btn) {
+                btn.classList.remove('selected');
+            });
+
+            button.classList.add('selected');  
+          
+            const selectedType = button.value;
+  
+          document.getElementById('selectedType').value = selectedType;
+          document.getElementById('assetForm').submit();
+        });
+      });
+    });
+  </script>
+  
+
 <%- include("partials/footer.ejs") %>
+</div>

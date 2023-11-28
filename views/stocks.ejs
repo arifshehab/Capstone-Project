@@ -1,0 +1,40 @@
+<%- include("partials/header.ejs") %>
+
+<%- include("partials/sidebar.ejs") %>
+<div class = "main">
+    <% if (locals.data) {%>
+        <% for (var i = 0; i < data.length; i++) { %>
+            <div class = "note"> 
+                <h1> <%= data[i].symbol%> <%= data[i].name%> </h1>
+                <div style="text-align: center;">
+                    <h1 style="display: inline;"> $<%= data[i].price %> | </h1>
+                    <h2 style="display: inline;"> 
+                        <%if (data[i].change > 0) {%>
+                            +
+                        <%}%>
+                        <%= data[i].change %>,
+                        <%if (data[i].change > 0) {%>
+                            +
+                        <%}%>
+                        <%= data[i].changespercentage %>% </h2>
+                </div> <br />
+                <% if (locals.data[i].platforms[0].platform != null) {%>
+                    <h2>Weighted CAGR: <%= parseFloat(data[i].weightedCAGR *100).toFixed(2)%>%, Position: $<%= parseFloat(data[i].totalQuantity * data[i].price).toFixed(2)%>, Net Returns: <%= parseFloat(data[i].totalQuantity * data[i].price - data[i].totalPurchase).toFixed(2)%></h2>
+                    <% for (var j = 0; j < data[i].platforms.length; j++) { %>
+                        <div class="note_interior">
+                            <h2 style="text-align: center"><%= data[i].platforms[j].platform%></h2>
+                            <p>Purchase Value: <%= parseFloat(data[i].platforms[j].total_trades).toFixed(2)%> <br \>Quantity: <%= data[i].platforms[j].total_quantity%> <br \>Current Value: <%= parseFloat(data[i].platforms[j].total_quantity * data[i].price).toFixed(2)%></p>
+                            <form action="/delete" method="POST">
+                                <input type="hidden" name="platform" value=<%= data[i].platforms[j].platform%>>
+                                <input type="hidden" name="symbol" value=<%= data[i].symbol%>>
+                                <button type="submit"> Delete </button>
+                            </form>
+                            
+                        </div>
+                <%}}%>
+                <p style="text-align: center;"> Open: <%= data[i].open%> | High: <%= data[i].dayhigh%> | Low: <%= data[i].daylow%> | 52-week High: <%= data[i].yearhigh%> | 52-week Low: <%= data[i].yearlow%> | P/E Ratio: <%= data[i].pe%></p>
+            </div>
+        <%}}%>
+    
+</div>
+<%- include("partials/footer.ejs") %>
