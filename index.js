@@ -27,7 +27,7 @@ db.connect();
 
 //Variables
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 const fmpAPIToken = process.env.FMP_TOKEN;
 
 //Middleware
