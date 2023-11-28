@@ -3,25 +3,31 @@ import bodyParser from "body-parser";
 import makeStruct from 'makestruct';
 import axios from "axios";
 import Chart from 'chart.js/auto';
-import pg from "pg";
+import pg from 'pg';
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
+const dbParams = {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
+  ssl: {
+    ca: fs.readFileSync(path.join(new URL(import.meta.url).pathname, process.env.SSL_CERT_PATH)),
+  },
+};
 
-const app = express();
-const port = 8000;
-
-//Connect db
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "trades",
-  password: "Kingdrogs2012!",
-  port: 5432,
-});
+const db = new pg.Client(dbParams);
 
 db.connect();
 
 //Variables
+const app = express();
+const port = 3000;
 const fmpAPIToken = "oYK7bHKQYIdMGpDeGkLgqx3UyCNsKMnq";
 
 //Middleware
