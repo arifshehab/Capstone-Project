@@ -38,9 +38,6 @@ p {
   object-fit: cover;
   border-radius: 50%;
 }
-form {
-  margin-top: 50px;
-}
 
 .feedback-input {
   color: white;

@@ -24,15 +24,20 @@
                         <div class="note_interior">
                             <h2 style="text-align: center"><%= data[i].platforms[j].platform%></h2>
                             <p>Purchase Value: <%= parseFloat(data[i].platforms[j].total_trades).toFixed(2)%> <br \>Quantity: <%= data[i].platforms[j].total_quantity%> <br \>Current Value: <%= parseFloat(data[i].platforms[j].total_quantity * data[i].price).toFixed(2)%></p>
-                            <form action="/delete" method="POST">
+                            <form action="/deletestock" method="POST">
                                 <input type="hidden" name="platform" value=<%= data[i].platforms[j].platform%>>
                                 <input type="hidden" name="symbol" value=<%= data[i].symbol%>>
-                                <button type="submit"> Delete </button>
+                                <button type="submit"> 🗑️ Trade</button>
                             </form>
                             
                         </div>
                 <%}}%>
-                <p style="text-align: center;"> Open: <%= data[i].open%> | High: <%= data[i].dayhigh%> | Low: <%= data[i].daylow%> | 52-week High: <%= data[i].yearhigh%> | 52-week Low: <%= data[i].yearlow%> | P/E Ratio: <%= data[i].pe%></p>
+                <p style="color: black"> Analytics: <a href="https://www.quiverquant.com/stock/<%=data[i].symbol%>">QuiverQuant</a>, <a href="https://www.tradingview.com/symbols/<%=data[i].symbol%>">Trading View</a></p>
+                <p style="text-align: center;"> Open: <%= data[i].open%> | High: <%= data[i].dayhigh%> | Low: <%= data[i].daylow%> | 52-week High: <%= data[i].yearhigh%> | 52-week Low: <%= data[i].yearlow%> | P/E Ratio: <%= data[i].pe%> </p>
+                <form action="/deletestock" method="POST" style="position: relative; left: 100;">
+                    <input type="hidden" name="shortlistsymbol" value=<%= data[i].symbol%>>
+                    <button type="submit"> 🗑️ Shortlist</button>
+                </form>
             </div>
         <%}}%>
     

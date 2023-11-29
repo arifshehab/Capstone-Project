@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
+import csv from "csv-parser";
 
 dotenv.config();
 
@@ -218,6 +219,39 @@ function combineArrays(cagrResult, result) {
   return combinedArray;
 }
 
+
+async function fetchBondsData(dataTable, historyTable) {
+  try {
+    const query = `
+      SELECT
+        i.*,
+        jsonb_agg(jsonb_build_object('platform', h.platform, 'total_quantity', h.total_quantity)) AS platforms
+      FROM
+        ${dataTable} i
+      LEFT JOIN (
+        SELECT
+          symbol as issue_code,
+          platform,
+          SUM(quantity) AS total_quantity
+        FROM
+          ${historyTable} h
+        GROUP BY
+          symbol,
+          platform
+      ) h ON i.issue_code = h.issue_code
+      GROUP BY
+        i.issue_code;
+    `;
+    const result = await db.query(query);
+    const data = result.rows;
+
+    console.log('Query bonds success');
+    return data;
+  } catch (error) {
+    console.error('Error executing query:', error);
+  }
+}
+
 // renders
 app.get("/", (req, res) => {
     res.render("index.ejs");
@@ -234,6 +268,15 @@ app.get("/stocks", async (req, res) => {
     console.log(res.statusCode, error.message)
   }
 });
+
+app.get("/bonds", async (req, res) => {
+  try {
+    const result = await fetchBondsData("sg_bonds_data", "bonds_history");
+    res.render("bonds.ejs", {data: result});
+  } catch (error) {
+    console.log(res.statusCode, error.message)
+  }
+});
   
 app.post("/asset", async (req, res) => {
   const eventDate = req.body["aDate"];
@@ -241,10 +284,14 @@ app.post("/asset", async (req, res) => {
   const eventSymbol = req.body["aName"];
   const eventType = req.body.selectedType;
   const eventCat = req.body.selectedCat;
-  const eventQuantity = req.body["aQuantity"]
+  var eventQuantity = req.body["aQuantity"];
+  if (eventType == 'Sell' || eventType == 'Put' || eventType == 'Withdraw') {
+    eventQuantity *= -1;
+  }
   const eventPlatform = req.body["aPlatform"]
   var eventPrice = 0;
   var returnMessage = "Successfully added";
+  var returnContent = "";
 
   try {
     // For Stocks and ETFs, add valid trades to stock_history table
@@ -272,10 +319,16 @@ app.post("/asset", async (req, res) => {
           "purchase_price": eventPrice, 
           "total_price": eventPrice*eventQuantity, 
           "platform": eventPlatform}, "stocks_history", false);
+          returnContent = eventSymbol + " Market " + eventType + ": " + eventQuantity + "share(s) at $" + eventPrice + " per share on " + eventPlatform;
         } else {
           returnMessage = "Price at given time cannot be retrieved";
         }
-        res.render("addasset.ejs", 
+        res.render("addasset.ejs", {content: returnContent,message: returnMessage});
+      } catch (error) {
+      console.log(res.statusCode, "Symbol does not exist")
+    }} else if (eventCat == 'Bonds') {
+      const result = await db.query("INSERT INTO bonds_history (symbol, type, quantity, date, time, platform) VALUES ($1,$2, $3, $4, $5, $6)", [eventSymbol, eventType, eventQuantity, eventDate, eventTime, eventPlatform]);
+      res.render("addasset.ejs", 
         { addedAssetName: eventSymbol,
             addedAssetEvent: eventType, 
             addedAssetQuantity: eventQuantity,
@@ -284,24 +337,60 @@ app.post("/asset", async (req, res) => {
             addedAssetPrice: eventPrice,
             message: returnMessage
         })
-      } catch (error) {
-      console.log(res.statusCode, "Symbol does not exist")
-    }}
+    }
   } catch (error) {
     console.log(res.statusCode, error.message)
   }
 });
 
-app.post("/delete", async (req, res) => {
+app.post("/deletestock", async (req, res) => {
   const symbolDelete = req.body.symbol;
   const platformDelete = req.body.platform;
-  console.log(symbolDelete, platformDelete);
-  try {
-    await db.query("DELETE FROM stocks_history WHERE platform = $1 AND symbol = $2", [platformDelete, symbolDelete]);
-    res.redirect("/stocks");
-  } catch (err) {
-    console.log(err);
+  const shortlistSymbolDelete = req.body.shortlistsymbol;
+  
+  if (symbolDelete || platformDelete){
+    console.log(symbolDelete, platformDelete, shortlistSymbolDelete, "top");
+    try {
+      await db.query("DELETE FROM stocks_history WHERE platform = $1 AND symbol = $2", [platformDelete, symbolDelete]);
+      res.redirect("/stocks");
+    } catch (err) {
+      console.log(err);
+    }
   }
+  if (shortlistSymbolDelete){
+    console.log(symbolDelete, platformDelete, shortlistSymbolDelete, "bottom");
+    try {
+      await db.query("DELETE FROM stocks_interested WHERE symbol = $1", [shortlistSymbolDelete]);
+      res.redirect("/stocks");
+    } catch (err) {
+      console.log(err);
+    }
+  }  
+})
+
+app.post("/deletebond", async (req, res) => {
+  const symbolDelete = req.body.issue_code;
+  const platformDelete = req.body.platform;
+  const shortlistSymbolDelete = req.body.shortlistissue_code;
+  
+  if (symbolDelete || platformDelete){
+    console.log(symbolDelete, platformDelete, shortlistSymbolDelete, "top");
+    try {
+      await db.query("DELETE FROM bonds_history WHERE platform = $1 AND symbol = $2", [platformDelete, symbolDelete]);
+      res.redirect("/bonds");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  if (shortlistSymbolDelete){
+    console.log(symbolDelete, platformDelete, shortlistSymbolDelete, "bottom");
+    try {
+      await db.query("DELETE FROM bonds_history WHERE symbol = $1", [shortlistSymbolDelete]);
+      res.redirect("/bonds");
+    } catch (err) {
+      console.log(err);
+    }
+  }  
 })
 
 app.post("/", (req, res) => {

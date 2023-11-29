@@ -1,0 +1,33 @@
+<%- include("partials/header.ejs") %>
+
+<%- include("partials/sidebar.ejs") %>
+<div class = "main">
+    <% if (locals.data) {%>
+        <% for (var i = 0; i < data.length; i++) { %>
+            <% if (locals.data[i].platforms[0].platform != null) {%>
+                <div class = "note"> 
+                <h1> <%= data[i].product_type%> ( <%= data[i].issue_code %> )</h1>
+                <h2> CAGR: <%= parseFloat(data[i].cagr * 100).toFixed(2)%>% | Yield: <%= parseFloat(data[i].yield).toFixed(2)%>% | Price: <%= parseFloat(data[i].price).toFixed(2)%>% </h2>
+                <br />    
+                    <% for (var j = 0; j < data[i].platforms.length; j++) { %>
+                        <div class="note_interior">
+                            <h2 style="text-align: center"><%= data[i].platforms[j].platform%></h2>
+                            <h2 style="text-align: center">$<%= data[i].platforms[j].total_quantity%></h2>
+                            
+                            <form action="/deletebond" method="POST">
+                                <input type="hidden" name="platform" value=<%= data[i].platforms[j].platform%>>
+                                <input type="hidden" name="issue_code" value=<%= data[i].issue_code%>>
+                                <button type="submit"> 🗑️ Trade</button>
+                            </form>
+                            
+                        </div>
+                <%}%>
+                <p style="text-align: center;">  Issue Date: <%= data[i].issue_date.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %> | Maturity Date: <%= data[i].maturity_date.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })%> </p>
+                <form action="/deletebond" method="POST" style="position: relative; left: 100;">
+                    <input type="hidden" name="shortlistissue_code" value=<%= data[i].issue_code%>>
+                    <button type="submit"> 🗑️ Shortlist</button>
+                </form>
+            </div>
+        <%}}}%>
+</div>
+<%- include("partials/footer.ejs") %>

@@ -7,9 +7,8 @@
         <%}%>
     </h1>
 <p>
-    <% if (locals.addedAssetName && locals.addedAssetDate && locals.addedAssetEvent && locals.addedAssetQuantity) { %>
-        <%= locals.addedAssetName %> Market <%= locals.addedAssetEvent %>: <br>
-        <%= locals.addedAssetQuantity %> share(s) at $<%= locals.addedAssetPrice %> filled on <%= locals.addedAssetDate %> <%= locals.addedAssetTime %>
+    <% if (locals.content) { %>
+        <%= locals.content %>
     <%}%>
 </p>
 
