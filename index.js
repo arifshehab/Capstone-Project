@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
-import csv from "csv-parser";
+import cheerio from "cheerio";
 
 dotenv.config();
 
@@ -319,7 +319,7 @@ app.post("/asset", async (req, res) => {
           "purchase_price": eventPrice, 
           "total_price": eventPrice*eventQuantity, 
           "platform": eventPlatform}, "stocks_history", false);
-          returnContent = eventSymbol + " Market " + eventType + ": " + eventQuantity + "share(s) at $" + eventPrice + " per share on " + eventPlatform;
+          returnContent = eventSymbol + " Market " + eventType + ": " + eventQuantity + " share(s) at $" + eventPrice + " per share on " + eventPlatform;
         } else {
           returnMessage = "Price at given time cannot be retrieved";
         }
