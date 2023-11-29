@@ -7,8 +7,6 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
-import cheerio from "cheerio";
-import puppeteer from "puppeteer";
 
 dotenv.config();
 
@@ -396,20 +394,32 @@ app.post("/deletebond", async (req, res) => {
 
 app.post('/analytics', async (req, res) => {
   try {
-    const ticker = req.body.chosenticker;
-    console.log("ticker = " + ticker, req.body)
+    const senate_ticker = req.body.senate;
+    const house_ticker = req.body.congress;
+    var result;
+    var filtered;
     const config = {
       headers: { Authorization: `Bearer ${process.env.QUIVER_TOKEN}` },
     };
-    const result = await axios.get("https://api.quiverquant.com/beta/live/senatetrading?options=true", config);
-    const filtered = result.data.filter(item => item.Ticker === ticker);
-    console.log(filtered[0].Senator);
-
+    if (senate_ticker) {
+    result = await axios.get("https://api.quiverquant.com/beta/live/senatetrading?options=true", config);
+    filtered = result.data.filter(item => item.Ticker.trim() == req.body.senate.trim());
+    } 
     res.render("analytics.ejs", {data: filtered});
   } catch (err) {
     console.log(err);
   }
 });
+
+app.get("/temp", (req, res) => {
+  res.render("temp.ejs");
+});
+
+app.post("/temp", async (req, res) => {
+  const result = await axios.get("https://api.breakingbadquotes.xyz/v1/quotes");
+  console.log(result.data[0].quote);
+  res.render("temp.ejs", {message: result.data[0].quote});
+})
 
 
 app.post("/", (req, res) => {

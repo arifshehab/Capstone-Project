@@ -1,0 +1,18 @@
+<%- include("partials/header.ejs") %>
+
+<%- include("partials/sidebar.ejs") %>
+<h3 style = "margin-top: 50px;"> ...Work in progress... </h3>
+<% if (locals.message) { %>
+    <p><%= message %></p>
+<%} else {%>
+    <p> We're done when we say we're done</p>
+<%}%>
+
+<form action="/temp" method="POST">
+    <input type="submit" value=" New Quote ">
+</form>
+<br \>
+<img src="https://y.yarn.co/5f872be1-be64-41a6-9f60-9f72862361ca_text.gif" alt = "We're done when we say we're done" style="height: 50%; width: auto;">
+
+
+<%- include("partials/footer.ejs") %>

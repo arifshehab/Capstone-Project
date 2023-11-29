@@ -66,7 +66,17 @@ textarea {
 }
 
 .note {
-  background: #fff;
+  background: #FAEED1;
+  border-radius: 7px;
+  box-shadow: 0 2px 5px #ccc;
+  padding: 10px;
+  width: auto;
+  margin: 16px;
+  text-align: left;
+}
+
+.note0 {
+  background: #DED0B6;
   border-radius: 7px;
   box-shadow: 0 2px 5px #ccc;
   padding: 10px;
@@ -91,7 +101,7 @@ textarea {
 
 .note_interior {
   font-size: 1em;
-  background: #fff;
+  background: whitesmoke;
   border-radius: 7px;
   box-shadow: 0 2px 5px #ccc;
   padding: 10px;

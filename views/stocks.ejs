@@ -4,7 +4,7 @@
 <div class = "main">
     <% if (locals.data) {%>
         <% for (var i = 0; i < data.length; i++) { %>
-            <div class = "note"> 
+            <div class = "note note<%=i%2%>"> 
                 <h1> <%= data[i].symbol%> <%= data[i].name%> </h1>
                 <div style="text-align: center;">
                     <h1 style="display: inline;"> $<%= data[i].price %> | </h1>
@@ -34,14 +34,16 @@
                 <%}}%>
                 <p style="color: black"> Analytics: <a href="https://www.quiverquant.com/stock/<%=data[i].symbol%>">QuiverQuant</a>, <a href="https://www.tradingview.com/symbols/<%=data[i].symbol%>">Trading View</a></p>
                 <p style="text-align: center;"> Open: <%= data[i].open%> | High: <%= data[i].dayhigh%> | Low: <%= data[i].daylow%> | 52-week High: <%= data[i].yearhigh%> | 52-week Low: <%= data[i].yearlow%> | P/E Ratio: <%= data[i].pe%> </p>
-                <form action="/deletestock" method="POST" style="position: relative; left: 100;">
-                    <input type="hidden" name="shortlistsymbol" value=<%= data[i].symbol%>>
+                <div style="display: flex; justify-content: space-between;">
+                <form action="/analytics" method="POST" style="display: inline-block; margin-right: 10px;">    
+                    <button type="submit" name="congress" value="<%= data[i].symbol %>"> Congress Trading </button>
+                    <button type="submit" name="senate" value="<%= data[i].symbol %>"> Senate Trading </button>
+                </form>
+                <form action="/deletestock" method="POST" style="display: inline-block; margin-right: 10px;">
+                    <input type="hidden" name="shortlistsymbol" value="<%= data[i].symbol %>">
                     <button type="submit"> 🗑️ Shortlist</button>
                 </form>
-                <form action="/analytics" method="POST" style="position: relative; left: 100;">
-                    <input type="hidden" name="chosenticker" value=<%= data[i].symbol%>>
-                    <button type="submit"> Analytics: Senate Trading </button>
-                </form>
+            </div>
             </div>
         <%}}%>
     
