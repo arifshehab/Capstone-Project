@@ -38,6 +38,7 @@
                 <form action="/analytics" method="POST" style="display: inline-block; margin-right: 10px;">    
                     <button type="submit" name="congress" value="<%= data[i].symbol %>"> Congress Trading </button>
                     <button type="submit" name="senate" value="<%= data[i].symbol %>"> Senate Trading </button>
+                    <button type="submit" name="lobby" value="<%= data[i].symbol %>"> Lobbyists </button>
                 </form>
                 <form action="/deletestock" method="POST" style="display: inline-block; margin-right: 10px;">
                     <input type="hidden" name="shortlistsymbol" value="<%= data[i].symbol %>">

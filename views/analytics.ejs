@@ -2,14 +2,27 @@
 
 <%- include("partials/sidebar.ejs") %>
 <div class = "main">
-    <% if (locals.data) {%>
+    <%if (locals.mode == "error") {%>
+        <p> There are no entries available. </p>
+    <%}%>
+    <% if (locals.data && locals.mode) {%>
         <% for (var i = 0; i < data.length; i++) { %>    
         <div class = "note_interior" > 
-            <h1 style="font-size: large;"> <%= data[i].Senator%> </h1>
+            <% if (mode == 'congress') {%>
+            <h1 style="font-size: large;"> <%= data[i].Senator%><%= data[i].Representative%> </h1>
             <h3 style="font-size: medium; text-align: center;"><%= data[i].Transaction %> : $<%= data[i].Amount %> </h3>
             <br />    
             
             <p style="text-align: center;">  <%= data[i].Ticker%> | Date:  <%= data[i].Date%> | Type: <%= data[i].Type%> </p>
+            <%} else if (mode == 'lobby') {%>
+                <h1 style="font-size: large;"> <%= data[i].Registrant%> </h1>
+                <h3 style="font-size: medium; text-align: center;"> Client: <%= data[i].Client %> | $<%= data[i].Amount %> </h3>
+                <br />    
+            
+                <p style="text-align: center;">
+                    <%= data[i].Ticker %> | Date: <%= data[i].Date %> | Issue: <%= data[i].Issue ? data[i].Issue.slice(0, 50) : 'N/A' %>
+                </p>  
+            <%}%>
         </div>
         <%}}%>
 </div>

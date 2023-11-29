@@ -396,18 +396,38 @@ app.post('/analytics', async (req, res) => {
   try {
     const senate_ticker = req.body.senate;
     const house_ticker = req.body.congress;
+    var lobby_ticker = req.body.lobby;
+
+    console.log("senate_ticker:", senate_ticker);
+    console.log("house_ticker:", house_ticker);
+    console.log("lobby_ticker:", lobby_ticker);
+
     var result;
     var filtered;
     const config = {
       headers: { Authorization: `Bearer ${process.env.QUIVER_TOKEN}` },
     };
-    if (senate_ticker) {
-    result = await axios.get("https://api.quiverquant.com/beta/live/senatetrading?options=true", config);
-    filtered = result.data.filter(item => item.Ticker.trim() == req.body.senate.trim());
-    } 
-    res.render("analytics.ejs", {data: filtered});
+    if (senate_ticker != null) {
+      console.log("senate line")
+      result = await axios.get("https://api.quiverquant.com/beta/live/senatetrading?options=true&page=1&page_size=25", config);
+      filtered = result.data.filter(item => item.Ticker.trim() == senate_ticker.trim());
+      res.render("analytics.ejs", {data: filtered, mode: "congress"});
+    } else if (house_ticker!= null) {
+      console.log("house line")
+      result = await axios.get("https://api.quiverquant.com/beta/live/housetrading?options=true&page=1&page_size=25", config);
+      filtered = result.data.filter(item => item.Ticker.trim() == house_ticker.trim());
+      res.render("analytics.ejs", {data: filtered, mode: "congress"});
+    } else if (lobby_ticker!= null) {
+      lobby_ticker = lobby_ticker.trim();
+      console.log("lobby line")
+      result = await axios.get(`https://api.quiverquant.com/beta/historical/lobbying/${lobby_ticker}?page=1&page_size=25`, config);
+      
+      console.log(result.data);
+      res.render("analytics.ejs", {data: result.data, mode: "lobby"});
+    }
   } catch (err) {
-    console.log(err);
+    console.log(err, "QUIVER ERROR");
+    res.render("analytics.ejs", {mode: "error"});
   }
 });
 
@@ -417,7 +437,6 @@ app.get("/temp", (req, res) => {
 
 app.post("/temp", async (req, res) => {
   const result = await axios.get("https://api.breakingbadquotes.xyz/v1/quotes");
-  console.log(result.data[0].quote);
   res.render("temp.ejs", {message: result.data[0].quote});
 })
 
