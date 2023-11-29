@@ -38,6 +38,10 @@
                     <input type="hidden" name="shortlistsymbol" value=<%= data[i].symbol%>>
                     <button type="submit"> 🗑️ Shortlist</button>
                 </form>
+                <form action="/analytics" method="POST" style="position: relative; left: 100;">
+                    <input type="hidden" name="chosenticker" value=<%= data[i].symbol%>>
+                    <button type="submit"> Analytics: Senate Trading </button>
+                </form>
             </div>
         <%}}%>
     

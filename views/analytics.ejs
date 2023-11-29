@@ -1,0 +1,16 @@
+<%- include("partials/header.ejs") %>
+
+<%- include("partials/sidebar.ejs") %>
+<div class = "main">
+    <% if (locals.data) {%>
+        <% for (var i = 0; i < data.length; i++) { %>    
+        <div class = "note_interior" > 
+            <h1 style="font-size: large;"> <%= data[i].Senator%> </h1>
+            <h3 style="font-size: medium; text-align: center;"><%= data[i].Transaction %> : $<%= data[i].Amount %> </h3>
+            <br />    
+            
+            <p style="text-align: center;">  <%= data[i].Ticker%> | Date:  <%= data[i].Date%> | Type: <%= data[i].Type%> </p>
+        </div>
+        <%}}%>
+</div>
+<%- include("partials/footer.ejs") %>

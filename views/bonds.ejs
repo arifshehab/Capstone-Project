@@ -2,7 +2,7 @@
 
 <%- include("partials/sidebar.ejs") %>
 <div class = "main">
-    <% if (locals.data) {%>
+    <% if (locals.data && locals.data.length >0) {%>
         <% for (var i = 0; i < data.length; i++) { %>
             <% if (locals.data[i].platforms[0].platform != null) {%>
                 <div class = "note"> 
@@ -28,6 +28,8 @@
                     <button type="submit"> 🗑️ Shortlist</button>
                 </form>
             </div>
-        <%}}}%>
+        <%}}} else {%>
+            <h1> No Senate Trading Results</h1>
+        <%}%>
 </div>
 <%- include("partials/footer.ejs") %>

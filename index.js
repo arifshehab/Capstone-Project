@@ -8,6 +8,7 @@ import path from 'path';
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
 import cheerio from "cheerio";
+import puppeteer from "puppeteer";
 
 dotenv.config();
 
@@ -392,6 +393,24 @@ app.post("/deletebond", async (req, res) => {
     }
   }  
 })
+
+app.post('/analytics', async (req, res) => {
+  try {
+    const ticker = req.body.chosenticker;
+    console.log("ticker = " + ticker, req.body)
+    const config = {
+      headers: { Authorization: `Bearer ${process.env.QUIVER_TOKEN}` },
+    };
+    const result = await axios.get("https://api.quiverquant.com/beta/live/senatetrading?options=true", config);
+    const filtered = result.data.filter(item => item.Ticker === ticker);
+    console.log(filtered[0].Senator);
+
+    res.render("analytics.ejs", {data: filtered});
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 
 app.post("/", (req, res) => {
     res.render("index.ejs", {data: trades});
