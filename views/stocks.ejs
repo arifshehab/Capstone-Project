@@ -32,9 +32,10 @@
                             
                         </div>
                 <%}}%>
-                <p style="color: black"> Analytics: <a href="https://www.quiverquant.com/stock/<%=data[i].symbol%>">QuiverQuant</a>, <a href="https://www.tradingview.com/symbols/<%=data[i].symbol%>">Trading View</a></p>
+                
                 <p style="text-align: center;"> Open: <%= data[i].open%> | High: <%= data[i].dayhigh%> | Low: <%= data[i].daylow%> | 52-week High: <%= data[i].yearhigh%> | 52-week Low: <%= data[i].yearlow%> | P/E Ratio: <%= data[i].pe%> </p>
                 <div style="display: flex; justify-content: space-between;">
+                    <p style="color: black"> Analytics: <a href="https://www.quiverquant.com/stock/<%=data[i].symbol%>">QuiverQuant</a>, <a href="https://www.tradingview.com/symbols/<%=data[i].symbol%>">Trading View</a></p>    
                 <form action="/analytics" method="POST" style="display: inline-block; margin-right: 10px;">    
                     <button type="submit" name="congress" value="<%= data[i].symbol %>"> Congress Trading </button>
                     <button type="submit" name="senate" value="<%= data[i].symbol %>"> Senate Trading </button>
